@@ -1,32 +1,28 @@
-import React from 'react'
-import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase'
+import React, { useState } from 'react';
+import { Container, Row, Col, Form, Button} from "react-bootstrap";
+import { auth } from '../firebase';
+import { createUserWithEmailAndPassword} from 'firebase/auth'
 
-const Register = () => {
+function SignUp() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    const [email,setEmail]=useState("")
-    const [password,setPassword]=useState("")
-
-    const signUp = (e)=>{
-        e.preventDefault();
-        createUserWithEmailAndPassword(auth,email,password)
-        .then((userCredential)=>{
-            console.log(userCredential)
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    try {
+      await createUserWithEmailAndPassword(auth,email, password);
+      console.log('User created successfully');
+    } catch (error) {
+      console.error('Error signing up:', error.message);
     }
+  };
 
   return (
     <Container>
     <Row className="mt-5 justify-content-md-center">
       <Col md={6}>
         <h1>Register</h1>
-        <Form  onSubmit={signUp}>
+        <Form  onSubmit={handleSignUp}>
           <Form.Group className="mb-3" controlId="validationCustom01">
             <Form.Label>Email</Form.Label>
             <Form.Control
@@ -61,7 +57,7 @@ const Register = () => {
       </Col>
     </Row>
   </Container>
-  )
+  );
 }
 
-export default Register
+export default SignUp;

@@ -1,32 +1,29 @@
-import e from 'express'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Container,Row,Col,Form, Button } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
-import { auth } from '../firebase'
+import { auth } from '../firebase';
+import { Link } from 'react-router-dom';
+import { signInWithEmailAndPassword} from 'firebase/auth'
 
-const Login = () => {
+function SignIn() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    const [email,setEmail]=useState("")
-    const [password,setPassword]=useState("")
-
-const signIn = ()=>{
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth,email,password)
-    .then((userCredential)=>{
-        console.log(userCredential)
-    })
-    .catch((error)=>{
-        console.log(error)
-    })
-}
+    try {
+      await signInWithEmailAndPassword(auth,email, password);
+      // User signed in successfully
+    } catch (error) {
+      console.error('Error signing in:', error.message);
+    }
+  };
 
   return (
     <Container>
     <Row className="mt-5 justify-content-md-center">
       <Col md={6}>
         <h1>Login</h1>
-        <Form noValidate onSubmit={signIn} >
+        <Form onSubmit={handleSignIn} >
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
             <Form.Control
@@ -62,7 +59,7 @@ const signIn = ()=>{
       </Col>
     </Row>
   </Container>
-  )
+  );
 }
 
-export default Login
+export default SignIn;
